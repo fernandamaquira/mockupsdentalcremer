@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Product Management</title>
+    <style>
+        /* Basic styling for demonstration purposes */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .product-form {
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: 400px;
+            margin: 10px;
+        }
+
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Management</h1>
+    <div class="container">
+        <form class="product-form" id="productForm">
+            <label for="productName">Product Name</label>
+            <input type="text" id="productName" name="productName" required>
+
+            <label for="productImagesSite">Product Images (Mockup Site)</label>
+            <input type="file" id="productImagesSite" name="productImagesSite" accept="image/*" multiple required>
+
+            <label for="productImagesAtual">Product Images (Mockup Atual)</label>
+            <input type="file" id="productImagesAtual" name="productImagesAtual" accept="image/*" multiple required>
+
+            <button type="button" onclick="addProduct()">Add Product</button>
+        </form>
+    </div>
+
+    <h2>Product List</h2>
+    <ul id="productList">
+        <!-- Product items will be added here dynamically -->
+    </ul>
+
+    <script>
+        function addProduct() {
+            const productName = document.getElementById('productName').value;
+            const productImagesSite = document.getElementById('productImagesSite').files;
+            const productImagesAtual = document.getElementById('productImagesAtual').files;
+
+            if (productName && productImagesSite.length > 0 && productImagesAtual.length > 0) {
+                const productList = document.getElementById('productList');
+                const listItem = document.createElement('li');
+                const imagesSite = [];
+                const imagesAtual = [];
+
+                for (let i = 0; i < productImagesSite.length; i++) {
+                    const productImageURL = URL.createObjectURL(productImagesSite[i]);
+                    imagesSite.push(`<a href="URL_HERE"><img src="${productImageURL}" alt="${productName} (Mockup Site)" style="max-width: 100px;"></a>`);
+                }
+
+                for (let i = 0; i < productImagesAtual.length; i++) {
+                    const productImageURL = URL.createObjectURL(productImagesAtual[i]);
+                    imagesAtual.push(`<a href="URL_HERE"><img src="${productImageURL}" alt="${productName} (Mockup Atual)" style="max-width: 100px;"></a>`);
+                }
+
+                listItem.innerHTML = `
+                    <span>${productName}</span>
+                    <div>Images (Mockup Site): ${imagesSite.join('')}</div>
+                    <div>Images (Mockup Atual): ${imagesAtual.join('')}</div>
+                `;
+
+                productList.appendChild(listItem);
+
+                // Clear the form fields
+                document.getElementById('productName').value = '';
+                document.getElementById('productImagesSite').value = '';
+                document.getElementById('productImagesAtual').value = '';
+            } else {
+                alert('Please fill in the product name and select at least one image for both "Mockup Site" and "Mockup Atual".');
+            }
+        }
+    </script>
+</body>
+</html>
